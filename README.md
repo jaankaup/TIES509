@@ -1,7 +1,7 @@
 # Kirjareferaatti
 
-**Tekijä:** Janne Kauppinen, janne.a.kauppinen@student.jyu.fi
-**Vuosi:** 2020
+**Tekijä:** Janne Kauppinen, janne.a.kauppinen@student.jyu.fi<br>
+**Vuosi:** 2020<br>
 **Kurssi:** TIES509
 
 Tässä työssä tehdään yksi tai useampi kirjareferaatti ennaltasovitusta aiheista.
