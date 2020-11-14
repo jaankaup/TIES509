@@ -1,0 +1,93 @@
+#version 450
+
+//#define THREADS_X 1024 
+//#define THREADS_Y 8 
+#define THREADS_X 512 
+//#define THREADS_Y 8 
+#define LOCAL_SORT_THRESHOLD 8192
+// 9216 (64*144) == (64 * 2 * 72) 
+
+#define BITONIC_SIZE 8192 
+#define BITONIC_KPT 16 // keys per thread. 
+
+#define VERY_BIG_NUMBER 0xffffffff
+// should inf be used instead? 
+
+layout(local_size_x = THREADS_X) in;
+
+layout(set = 0, binding = 0) buffer Values {
+    uint[] values;
+};
+
+//shared uint temp[THREADS_X*BITONIC_KPT];
+shared uint temp[8192];
+
+const uint values_size = 1300;
+
+struct KeyBlock {
+	uint key_offset;
+	uint key_count;
+	uint buffer_id;
+	uint buffer_offset;
+};
+
+struct LocalSortBlock {
+	uint buffer_id;
+	uint buffer_offset;
+	uint is_merged;
+};
+
+// Bitonic sort.
+void bitonic() {
+
+  // Copy values to temp.
+  for (int i=0 ; i<BITONIC_KPT; i++) {
+      uint index = gl_LocalInvocationID.x + i * THREADS_X; 
+      if (index >= values_size) temp[index] = 0xffffffff; // TODO: check this
+      else temp[index] = values[index];
+      //temp[index] = values[index];
+  }
+
+  for (int k=2; k <= 8192; k = k << 1) {
+  for (int j=k>>1 ; j > 0; j = j >> 1) {
+  barrier();
+  for (int i=0 ; i<BITONIC_KPT; i++) {
+    uint index = gl_LocalInvocationID.x + i * THREADS_X; 
+    uint ixj = index ^ j;
+    uint a = temp[index];
+    uint b = temp[ixj];
+    if (ixj > index) {
+
+      if ((index & k) == 0) {
+        if (a > b) {
+          temp[index] = b;
+          temp[ixj] = a;
+        }
+      }
+      else if (a < b) {
+        temp[index] = b;
+        temp[ixj] = a;
+      }
+  }
+  }}};
+}
+
+void scatter() {
+  for (int i=0 ; i<BITONIC_KPT; i++) {
+      uint index = gl_LocalInvocationID.x + i * THREADS_X; 
+      if (index < values_size) values[index] = temp[index];
+  }
+}
+
+
+void main() {
+
+    bitonic();
+    scatter();
+//  uint index = gl_LocalInvocationID.x; // + THREADS_X * gl_LocalInvocationID.y;
+//  temp[index] = values[index]; 
+//
+//  temp[index] = temp[index] + float(index);
+//  values[index] = index; // index; // temp[index];
+}
+

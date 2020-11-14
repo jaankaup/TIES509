@@ -8,8 +8,8 @@ Tässä työssä tehdään yksi tai useampi kirjareferaatti ennaltasovitusta aih
 
 ## A Memory Bandwidth-Efficient Hybrid Radix Sort on GPU's
 
-**Tekijät** Elias Stehle, Hans-Arno Jacobsen
-**Vuosi:** 2017
+**Tekijät** Elias Stehle, Hans-Arno Jacobsen<br>
+**Vuosi:** 2017<br>
 **DOI:** 10.1145/3035918.3064043
 
 Artikkeli käsittelee näytönohjaimella suoritettavaa kantalukulajittelua (engl.
