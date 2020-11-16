@@ -35,32 +35,28 @@ millisekunnissa ja toimii myös niin sanotusti out-of-core algoritmina, eli se
 pystyy järjestämään myös dataa joka ei mahdu kerrallaan näytönohjaimen
 muistiin. Algoritmi on suunniteltu muistin käytön suhteen tehokkaaksi.
 
-"Artikkelin kirjoittajat sanovat myös kehittäneensä keinon
-vähentääkseen CPU:n ja GPU:n välisen dataliikenteen (PCIe) viivettä."
+## Kantalukulajittelu (Radix Sort)
 
-## Kantalukulajittelu
-
-Kantalukulajittelu perustuu k-bittisten avaimen tulkitsemista d-bittisten
-lukujen jonona. Perus idea on se että jaetaan k-bittinen luku riittävän pieniin
-d-bittisiin lukuihin siten että kantaluku r = 2^d ja että avaimet voidaan jakaa
-tehokkaasti r erillisiin osiin (engl. bucket).
+Kantalukulajittelu perustuu **k-bittisten** avaimen tulkitsemista
+**d-bittisten** lukujen jonona. Perus idea on se että jaetaan **k-bittinen**
+luku riittävän pieniin **d-bittisiin** lukuihin siten että kantaluku **r =
+2^d** ja että avaimet voidaan jakaa tehokkaasti r erillisiin osiin (engl.
+bucket).
 
 Avaimet voidaan käydä läpi kahdella eri tavalla: eniten merkisevästä
-k-bittisestä luvusta kohti vähiten merkitsevää lukua (**MSB radix sort**) tai päin
-vastaisessa järjestyksessä (**LSB radix sort**). MSD aloittaa lajittelun eniten merkitevästä 
-**k-bittisestä** luvusta ja jakaa avaimet **r** erilliseen osaan.
-
+**d-bittisestä** luvusta kohti vähiten merkitsevää lukua (**MSB radix sort**)
+tai päin vastaisessa järjestyksessä (**LSB radix sort**). MSD aloittaa
+lajittelun eniten merkitevästä **k-bittisestä** luvusta ja jakaa avaimet **r**
+erilliseen osaan (*engl. buckets*).
 
 | MSB      |          |          | LSB      |
 | -------- | -------- | -------- | -------- |
 | 00010000 | 00001010 | 11111000 | 10101000 |
-| -------- | -------- | -------- | -------- |
 
 **k** = 32, **d** = 8, **r** = 256
 
 Esimerkki 32 bittisestä avaimesta joka on esitetty 8-bittisten lukujen jonona.
 Kunkin osa-jonon kantaluku r on 2^8 = 256.
-
 
 
 ## Blah
