@@ -51,7 +51,7 @@ MSB radix sort aloittaa lajittelun eniten merkitevästä **k-bittisestä** luvus
 ja jakaa avaimet **r** erilliseen osaan arvonsa mukaan. Tämä tehdään niin
 sanotun laskentalajittelu (*engl. counting sort*) avulla siten että että
 aloitetaan laskemaan **k-bittisten** lukuen esiintyvyyksiä sitä vastaavaan
-histogrammiin.  Laskentalajittelun jälkeen lasketaan histogrammista alkusummat
+histogrammiin. Laskentalajittelun jälkeen lasketaan histogrammista alkusummat
 (*engl. exclusive prefix sum*) joka antaa kunkin luvun aloitus sijainnin
 lajittelua varten. Histogrammi pitää sisällään kunkin luvun k-bittisen luvun
 esiintymismäärät. Alkusummat kertovat vastaavasti lukua vastaavan avaimen
@@ -61,7 +61,7 @@ on GPU:ssa taulukko. Lopuksi avaimet sijoitetaan osiinsa (bucket)
 seuraaville **k-bittisille** luvuille. Lopputuloksena saadaan järjestettyjen
 lukujen jono.
 
-Edellisen esimerkin kohdalla histogrammi ja alkusummat ovat GPU
+Edellisen esimerkin mukainen histogrammi ja alkusummat ovat GPU
 toteutuksissa kumpikin 256 paikkaisia taulukoita.
 
 ## Histogrammi
@@ -94,7 +94,7 @@ se mihin kohtaan kohdetaulukkoa avain tullaan tallennetaan.
 Tämä vaihetta kutsutaan nimeltään laskentalajittelu (counting sort). Tämän
 jälkeen tehdään ensimmäinen lajittelu vaihe, eli kaikki avaimet käydään läpi,
 32-bittinen luku kopioidaan sen 8-bittisen MSB arvon mukaan uuteen taulukkoon.
-Taulukon sijainti saadaan alkusumma taulukosta. Kun arvo on kopioitu oikealle
+Sijainti taulukossa saadaan alkusumma taulukosta. Kun arvo on kopioitu oikealle
 paikalle kohde taulukkoa, alkusumman indeksissä olevaa arvoa kasvatetaan
 yhdellä. Eli seuraava saman numeron omaava avain kopioidaan yhtä indeksiä
 suurempaan paikkaan. Kukin avain tallenttuu siis täsmälleen kerran, ja näin
