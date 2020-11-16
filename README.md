@@ -18,36 +18,21 @@ Tässä työssä tehdään yksi tai useampi kirjareferaatti ennaltasovitusta aih
 | LSD             | Vähiten merkitsevä bitti |
 | MSD             | Eniten merkitsevä bitti  | 
 
-## Esipuhe
-
-Tämän kirjareferaatin pääasiallinen tarkoitus on esittää artikkelin sisältö
-sillä tarkkuudella että lukija ymmärtää ja pystyy itse toteuttamaan artikkelin
-mukaisen rinnakkaistetun kantalukulajittelun. Erityisesti GPU:lla toteutettava
-kantalukulajittelu on tarpeellista monessa eri kontekstissa ja itse näen
-tarpeelliseksi sen että ohjelmoijan on hyvä osata toteuttaa tehokas lajittelu
-algoritmi itse.  
-
 ## Johdanto
 
-Tässä artikkelissa esitetään uusi näytönohjaimella suoritettava radix sort
-algoritmi. Algoritmi kykenee lajittelemaan 2Gb 8 tavuisia tietuita 50
-millisekunnissa ja toimii myös niin sanotusti out-of-core algoritmina, eli se
-pystyy järjestämään myös dataa joka ei mahdu kerrallaan näytönohjaimen
-muistiin. Algoritmi on suunniteltu muistin käytön suhteen tehokkaaksi.
+Tässä artikkelissa esitetään uusi näytönohjaimella suoritettava
+kantalukulajittelu algoritmi. Algoritmi kykenee lajittelemaan 2Gb 8 tavuisia
+tietuita 50 millisekunnissa, ja toimii myös niin sanotusti out-of-core
+algoritmina. Tämä tarkoittaa sitä että algoritmi pystyy järjestämään myös
+sellaista dataa joka ei mahdu kerrallaan näytönohjaimen muistiin.
 
 ## Kantalukulajittelu (Radix Sort)
 
 Kantalukulajittelu perustuu **k-bittisten** avaimen tulkitsemista
 **d-bittisten** lukujen jonona. Perus idea on se että jaetaan **k-bittinen**
 luku riittävän pieniin **d-bittisiin** lukuihin siten että kantaluku **r =
-2^d** ja että avaimet voidaan jakaa tehokkaasti r erillisiin osiin (engl.
-bucket).
-
-Avaimet voidaan käydä läpi kahdella eri tavalla: eniten merkisevästä
-**d-bittisestä** luvusta kohti vähiten merkitsevää lukua (**MSB radix sort**)
-tai päin vastaisessa järjestyksessä (**LSB radix sort**). MSD aloittaa
-lajittelun eniten merkitevästä **k-bittisestä** luvusta ja jakaa avaimet **r**
-erilliseen osaan (*engl. buckets*).
+2^d** ja että avaimet voidaan jakaa tehokkaasti **r** erillisiin osiin (*engl.
+bucket*).
 
 | MSB      |          |          | LSB      |
 | -------- | -------- | -------- | -------- |
@@ -57,6 +42,24 @@ erilliseen osaan (*engl. buckets*).
 
 Esimerkki 32 bittisestä avaimesta joka on esitetty 8-bittisten lukujen jonona.
 Kunkin osa-jonon kantaluku r on 2^8 = 256.
+
+Avaimet voidaan käydä läpi kahdella eri tavalla: eniten merkisevästä
+**d-bittisestä** luvusta kohti vähiten merkitsevää lukua (**MSB radix sort**)
+tai päin vastaisessa järjestyksessä (**LSB radix sort**).
+
+MSD aloittaa lajittelun eniten merkitevästä **k-bittisestä** luvusta ja jakaa
+avaimet **r** erilliseen osaan arvonsa mukaan. Tämä tehdään niin sanotun
+laskentalajittelu (*engl. counting sort*) avulla siten että että aloitetaan
+laskemaan **k-bittisten** lukuen esiintyvyyksiä sitä vastaavaan histogrammiin.
+Laskentalajittelun jälkeen lasketaan histogrammista alkusumma (*engl. exclusive
+prefix sum*) joka antaa kunkin luvun aloitus sijainnin seuraavaa vaihetta
+varten. Histogrammi kertoo sen kuinka monta mitäkin k-bittistä lukua on
+yhteensä ja alkusummat kertovat vastaavasti sen sijainnin lopullisessa
+taulukossa johon luku sijoitetaan. Lopuksi avaimet sijoitetaan osiinsa (bucket)
+**k-bittisen** avaimensa perusteella. Tätä prosessia jatketaan rekursiivisesti
+seuraaville **k-bittisille** luvuille ja lopputuloksena saadaan järjestettyjen
+lukujen jono.
+
 
 
 ## Blah
