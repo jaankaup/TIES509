@@ -51,14 +51,15 @@ MSB radix sort aloittaa lajittelun eniten merkitevästä **k-bittisestä** luvus
 ja jakaa avaimet **r** erilliseen osaan arvonsa mukaan. Tämä tehdään niin
 sanotun laskentalajittelu (*engl. counting sort*) avulla siten että että
 aloitetaan laskemaan **k-bittisten** lukuen esiintyvyyksiä sitä vastaavaan
-histogrammiin.  Laskentalajittelun jälkeen lasketaan histogrammista alkusumma
+histogrammiin.  Laskentalajittelun jälkeen lasketaan histogrammista alkusummat
 (*engl. exclusive prefix sum*) joka antaa kunkin luvun aloitus sijainnin
-seuraavaa vaihetta varten. Histogrammi kertoo sen kuinka monta mitäkin
-k-bittistä lukua on yhteensä ja alkusummat kertovat vastaavasti lukua vastaavan
-avaimen sijainnin lopullisessa taulukossa johon luku sijoitetaan. Lopuksi
-avaimet sijoitetaan osiinsa (bucket) **k-bittisen** avaimensa perusteella. Tätä
-prosessia jatketaan rekursiivisesti seuraaville **k-bittisille** luvuille.
-Lopputuloksena saadaan järjestettyjen lukujen jono.
+lajittelua varten. Histogrammi pitää sisällään kunkin luvun k-bittisen luvun
+esiintymismäärät. Alkusummat kertovat vastaavasti lukua vastaavan avaimen
+sijainnin lopullisessa tietorakenteessa johon avain tallennetaan. Tietorakenne
+on GPU:ssa taulukko. Lopuksi avaimet sijoitetaan osiinsa (bucket)
+**k-bittisen** avaimensa perusteella. Tätä prosessia jatketaan rekursiivisesti
+seuraaville **k-bittisille** luvuille. Lopputuloksena saadaan järjestettyjen
+lukujen jono.
 
 Edellisen esimerkin kohdalla histogrammi ja alkusummat ovat GPU
 toteutuksissa kumpikin 256 paikkaisia taulukoita.
@@ -73,17 +74,19 @@ a0 == a1 == ... == a255 == 0
 | b0 | b1 | b2 | ... | b255 |
 | -- | -- | -- | --- | ---- |
 
-MSB kantaluku lajittelussa otetaan avaimesta 8 ensimmäistä bittiä ja katsotaan
-mikä luku on kyseessä. Tässä esimerkissä kyseessä on 8-bittinen luku, joten
-arvo alue on [0-255]. Edellisen esimerkin kohdalla luku on 00000010 eli
-desimaalilukuna 2. Tällöin histogrammin arvoa indeksissä 2 korotetaan yhdellä.
-Tällä tavalla käydään avaimet läpi ja korotetaan aina sen histogrammin
-indeksissä olevaa arvoa joka vastaa lukua. Tässä siis toisin sanoen suoritetaan
-luvun esiintyvyyksien laskentaa. 
+MSB kantaluku lajittelussa otetaan kustakin avaimesta 8 ensimmäistä bittiä ja
+katsotaan mikä luku on kyseessä. Tässä esimerkissä avaimet ovat jaettu
+8-bittisiin lukuihin, joten arvo alue on [0-255]. Edellisen esimerkin kohdalla
+luku on 00000010 eli desimaalilukuna 2. Tällöin histogrammin arvoa indeksissä 2
+korotetaan yhdellä, eli lisätään luvun kaksi ilmentymismäärää yhdellä. Tällä
+tavalla käydään avaimet läpi ja korotetaan aina sen histogrammin indeksissä
+olevaa arvoa joka vastaa lukua. Histogrammiin lasketaan siis lukujen
+esiintyvyyksien lukumäärää. 
 
 Kun laskenta on saatu päätökseen, suoritetaan alkusumma laskenta
-histogrammille.  Exclusive prefix sum lasketaan siten, että lasketaan
-kumulatiivisesti histogrammin alkioita alkusummataulukkoon. 
+histogrammista. Alkusummat lasketaan siten, että lasketaan kumulatiivisesti
+histogrammin alkioita alkusummataulukkoon. Alkusummataulukosta saadaan tietää
+se mihin kohtaan kohdetaulukkoa avain tullaan tallennetaan.
 
 | b0 == 0 | b1 == a0 | b2 == (a0 + a1) | ... | b255 == (a0 + a1 + a2 + ... + 254)] |
 | ------- | -------- | --------------- | --- | ----------------------------------- |
@@ -91,6 +94,10 @@ kumulatiivisesti histogrammin alkioita alkusummataulukkoon.
 Tämä vaihetta kutsutaan nimeltään laskentalajittelu (counting sort). Tämän
 jälkeen tehdään ensimmäinen lajittelu vaihe, eli kaikki avaimet käydään läpi,
 32-bittinen luku kopioidaan sen 8-bittisen MSB arvon mukaan uuteen taulukkoon.
-Taulukon sijainti saadaan alkusumma taulukosta, ja kun arvo on kopioitu
-oikealle paikalle alkusumman ko. indeksissä olevaa arvoa kasvatetaan yhdellä.
-Näin saadaan seuraavan saman numeron indeksi eli sijainti kohdetaulukossa.
+Taulukon sijainti saadaan alkusumma taulukosta. Kun arvo on kopioitu oikealle
+paikalle kohde taulukkoa, alkusumman indeksissä olevaa arvoa kasvatetaan
+yhdellä. Eli seuraava saman numeron omaava avain kopioidaan yhtä indeksiä
+suurempaan paikkaan. Kukin avain tallenttuu siis täsmälleen kerran, ja näin
+saatu taulukko on 8 eniten merkitsevän bitin suhteen järjestyksessä. Sama
+proseduuri toistetaan ottamalla seuraavat eniten merkitsevät 8-bittiset luvut.
+Lopulta kaikki avaimet ovat järjestetty.
