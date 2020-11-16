@@ -54,7 +54,8 @@ Esimerkki 32 bittisestä avaimesta joka on esitetty 8-bittisten lukujen jonona.
 Kunkin osa-jonon kantaluku r on 2^8 = 256. Avain jakautuu tässä tapauksessa "32/8" neljään 
 erilliseen osaan. Kaikki lajiteltavat avaimet jaetaan 256 
 
-/lceil joo /rceil
+$\lceil joo $\rceil
+\lceil joo \rceil
 
 
 ## Blah
