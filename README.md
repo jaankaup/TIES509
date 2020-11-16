@@ -45,8 +45,14 @@ lukujen jonona. Perus idea on se että jaetaan k-bittinen luku riittävän pieni
 d-bittisiin lukuihin siten että kantaluku r = 2^d ja että avaimet voidaan jakaa tehokkaasti 
 r erillisiin osiin (engl. bucket). 
 
-| 0001000 | 00001010 | 11111000 | 10101000 |
-| ------- | -------- | -------- | -------- |
+| 00010000 | 00001010 | 11111000 | 10101000 |
+| -------- | -------- | -------- | -------- |
+
+**k** = 32, **d** = 8, **r** = 256
+
+Esimerkki 32 bittisestä avaimesta joka on esitetty 8-bittisten lukujen jonona.
+Kunkin osa-jonon kantaluku r on 2^8 = 256. Avain jakautuu tässä tapauksessa neljään 
+erilliseen osaan eli bucketiin.
 
 ## Blah
 
