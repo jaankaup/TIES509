@@ -125,6 +125,7 @@ Tallennetaan avain taulukkoon.
 
 Kasvatetaan histogrammin arvoa yhdellä. Seuraavan kerran samalla indeksillä saadaan siis seuraava paikka taulukosta. 
 Tällä tavoin kaikki avaimet menevät suoraan oikeaan paikkaan. Suoritetaan ns. laskentalajittelu (counting sort).
+
 | 0 | **1** | 5 | 9 | 9 | 9 | 9 | 10 | 11 | 11 | 12 | 12 | 12 | 13 | 14 | 15 |
 
 Sijoitetaan avaimet tulos taulukkoon edellisen esitetyllä tavalla.
