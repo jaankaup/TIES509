@@ -12,11 +12,11 @@ Tässä työssä tehdään yksi tai useampi kirjareferaatti ennaltasovitusta aih
 **Vuosi:** 2017<br>
 **DOI:** 10.1145/3035918.3064043
 
-| Termi           | Suomennos                |
-| --------------- | ------------------------ |
-| Radix Sort      | Kantalukulajittelu       |
-| LSB             | Vähiten merkitsevä bitti |
-| MSB             | Eniten merkitsevä bitti  | 
+| Termi           | Suomennos                 |
+| --------------- | ------------------------- |
+| Radix Sort      | Kantalukulajittelu        |
+| LSD             | Vähiten merkitsevä numero |
+| MSD             | Eniten merkitsevä numero  | 
 
 ## Johdanto
 
@@ -32,185 +32,231 @@ Kantalukulajittelu perustuu **k-bittisten** avaimen tulkitsemista
 **d-bittisten** kokonaislukujen jonona. Perus idea on se että jaetaan
 **k-bittinen** luku riittävän pieniin **d-bittisiin** lukuihin siten että
 kantaluku **r = 2^d** ja että avaimet voidaan jakaa tehokkaasti **r**
-erillisiin osiin (*engl.  bucket*).
+erillisiin osiin (*engl. bucket*).
 
-| MSB  |      |      |      |      |      |      | LSB  |
+| MSD  |      |      |      |      |      |      | LSD  |
 | ---- | ---- | ---- | ---- | ---- | ---- | ---- | ---- |
 | 0001 | 0010 | 0000 | 1010 | 1111 | 1000 | 1010 | 1000 |
 
 **k** = 32, **d** = 4, **r** = 16
 
 Esimerkki 32 bittisestä avaimesta joka on esitetty 4-bittisten lukujen jonona.
-Kunkin osa-jonon kantaluku r on 2^4 = 16.
+Kunkin osa-jonon kantaluku r on 2^4 = 16 mikä on myös *bucketien* lukumäärä.
 
 Avaimet voidaan käydä läpi kahdella eri tavalla: eniten merkisevästä
-**d-bittisestä** luvusta kohti vähiten merkitsevää lukua (**MSB radix sort**)
-tai päin vastaisessa järjestyksessä (**LSB radix sort**).
+**d-bittisestä** luvusta kohti vähiten merkitsevää lukua (**MSD radix sort**)
+tai päin vastaisessa järjestyksessä (**LSD radix sort**).
 
-MSB radix sort aloittaa lajittelun eniten merkitevästä **k-bittisestä** luvusta
-ja jakaa avaimet **r** erilliseen osaan arvonsa mukaan. Tämä tehdään niin
+MSD radix sort aloittaa lajittelun eniten merkitevästä **k-bittisestä** luvusta
+ja jakaa avaimet **r** erilliseen *bucketiin* arvonsa mukaan. Tämä tehdään niin
 sanotun laskentalajittelu (*engl. counting sort*) avulla siten että että
-aloitetaan laskemaan **k-bittisten** lukuen esiintyvyyksiä sitä vastaavaan
-histogrammiin. Laskentalajittelun jälkeen lasketaan histogrammista alkusummat
-(*engl. exclusive prefix sum*) joka antaa jokaiselle luvulle aloitus sijainnin
-avainten sijoittelua varten.
+aloitetaan laskemaan **k-bittisten** lukuen esiintyvyydet histogrammiin.
+Histogrammin avulla lasketaan alkusummat (*engl. exclusive prefix sum*) joka
+antaa jokaiselle luvulle aloitus sijainnin avainten sijoittelua varten.
 
 Lopuksi avaimet sijoitetaan osiinsa (bucket) **k-bittisen** avaimensa
 perusteella. Tätä prosessia jatketaan rekursiivisesti seuraaville
 **k-bittisille** luvuille. Lopputuloksena saadaan järjestettyjen lukujen jono.
 
+## Esimerkki kantalukulajittelusta (MSD)
 
-MSB kantaluku lajittelussa otetaan kustakin avaimesta 8 ensimmäistä bittiä ja
-katsotaan mikä luku on kyseessä. Tässä esimerkissä avaimet ovat jaettu
-8-bittisiin lukuihin, joten arvo alue on [0-255]. Edellisen esimerkin kohdalla
-luku on 00000010 eli desimaalilukuna 2. Tällöin histogrammin arvoa indeksissä 2
-korotetaan yhdellä, eli lisätään luvun kaksi ilmentymismäärää yhdellä. Tällä
-tavalla käydään avaimet läpi ja korotetaan aina sen histogrammin indeksissä
-olevaa arvoa joka vastaa lukua. Histogrammiin lasketaan siis lukujen
-esiintyvyyksien lukumäärää. Tämän jälkeen lasketaan alkusummat joista saadaan
-tietää mihin kohtaan avain sijoitetaan. 
+Tässä on esimerkki MSD kantalukulajittelusta. Järjestetään 8-bittisiä avaimia
+siten että tulkitaan avaimet 4-bitin osissa. 
 
-## Avaimet
-0. | 0001 | 1010 | 1000 | 1011 | 1101 | 1000 | 1010 | 1100 |
-1. | 0010 | 0110 | 0001 | 0010 | 0110 | 0010 | 1110 | 1000 |
-2. | 1101 | 0010 | 0010 | 1111 | 1001 | 1100 | 1010 | 1000 |
-3. | 0001 | 0000 | 0000 | 0010 | 1111 | 1000 | 1011 | 1001 |
-4. | 0001 | 1111 | 0000 | 1010 | 0011 | 1110 | 1010 | 1000 |
-5. | 1100 | 0011 | 0001 | 1011 | 0000 | 1000 | 1110 | 1010 |
-6. | 0010 | 0110 | 0000 | 1110 | 1010 | 0100 | 1011 | 0000 |
-7. | 0110 | 0110 | 0000 | 1110 | 1010 | 0100 | 1011 | 0000 |
+MSD kantalukulajittelussa lähdetään liikenteeseen eniten merkitsevästä
+4-bittisestä luvusta. Kantalukulajittelu ei perustu avainten vertailuun vaan se
+perustuu lukujen esiintyvyyksien laskentaan. Lukujen esiintyvyyksien perusteella 
+perusteella avaimet tallennetaan kohde taulukkoon. Kunkin vaiheen jälkeen
+avaimet ovat järjestyksessä eniten merkitsevien lukujen perusteella ja tätä
+prosessia jatketaan kunnes kaikki avaimet ovat järjestetty.
 
-## Histogrammi
-| 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+### Avaimet
+id  | 4-bit osissa | 10-kantaisessa osissa | Arvo |   
+--- | ------------- | ------------------ | ---- |  
+a0  | **0001** 1010 |  **1** ,    10 | 26 |
+a1  | **0010** 0110 |  **2** ,     6 | 38 |
+a2  | **1101** 0010 | **13** ,     2 | 210 |
+a3  | **0001** 0000 |  **1** ,     0 | 16 |
+a4  | **0001** 1111 |  **1** ,    15 | 31 |
+a5  | **1100** 0011 | **12** ,     3 | 195 |
+a6  | **0010** 0110 |  **2** ,     6 | 38 |
+a7  | **0110** 0110 |  **6** ,     6 | 102 |
+a8  | **1001** 1010 |  **9** ,    10 | 154 |
+a9  | **0010** 1110 |  **2** ,    14 | 46 |
+a10 | **1111** 0000 | **15** ,     0 | 240 |
+a11 | **0001** 0001 |  **1** ,     1 | 17 |
+a12 | **0001** 0100 |  **1** ,     4 | 20 |
+a13 | **1110** 0011 | **14** ,     3 | 227 |
+a14 | **0010** 0110 |  **2** ,     6 | 38 |
+a15 | **0111** 0110 |  **7** ,     6 | 118 |
 
-## Alkusummat (Exclusive prefix sum)
-| 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+**k** = 8, **d** = 4, **r** = 16
 
-## Tulos
+### Histogrammi (msd lukujen esiintymismäärät)
+| 0 | 5 | 4 | 0 | 0 | 0 | 1 | 1 | 0 | 1 | 0 | 0 | 1 | 1 | 1 | 1 |
+
+### Alkusummat (Exclusive prefix sum)
+| 0 | 0 | 5 | 9 | 9 | 9 | 9 | 10 | 11 | 11 | 12 | 12 | 12 | 13 | 14 | 15 |
+
+### Tulos
 | - | - | - | - | - | - | - | - |
 
-Lasketaan histogrammi eli **k-bittisen** luvun esiintymät:
+Histogrammiin tallenetaan tieto lukujen lukumääristä. Histogrammista nähdään
+myös se kuinka monta avainta tulee olemaan kussakin bucketissa.
+Laskentalajittelu suoritetaan rekursiivisesti aina jokaiselle bucketille.
 
-| **0001** | 1010 | 1000 | 1011 | 1101 | 1000 | 1010 | 1100 |
+Alkusummat kertovat sen etäisyyden (offset) taulukossa johon avain tallennetaan
+kun avaimia aletaan käydä läpi.
 
-| 0 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+Histogrammi kertoo myös sen kuinka monta avainta menee kuhunkin buckettiin.
+Tässä esimerkissä ensimmäiseen buckettiin kuuluu kaksi avainta. Alkusummasta nähdään että
+ensimmäiseen bucketin aloitusindeksi on 0.
 
-| **0010** | 0110 | 0001 | 0010 | 0110 | 0010 | 1110 | 1000 |
+#### Sijoitetaan ensimmäinen avain taulukkoon histogrammin avulla.
 
-| 0 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+a0 :: | **0001** 1010 |
 
-| **1101** | 0010 | 0010 | 1111 | 1001 | 1100 | 1010 | 1000 |
+Haetaan histogrammista taulukon indeksi johon avain kopioidaan. Näin avaimet saadaan 
+laskettua suoraan oikeaan kohtaan.
+| 0 | **0** | 5 | 9 | 9 | 9 | 9 | 10 | 11 | 11 | 12 | 12 | 12 | 13 | 14 | 15 |
 
-| 0 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 | 0 | 0 |
+Tallennetaan avain taulukkoon.
+| **a0** | - | - | - | - | - | - | - | - | - | - | - | - | - | - | - |
 
-| **0001** | 0000 | 0000 | 0010 | 1111 | 1000 | 1011 | 1001 |
+Kasvatetaan histogrammin arvoa yhdellä. Seuraavan kerran samalla indeksillä saadaan siis seuraava paikka taulukosta. 
+Tällä tavoin kaikki avaimet menevät suoraan oikeaan paikkaan. Suoritetaan ns. laskentalajittelu (counting sort).
+| 0 | **1** | 5 | 9 | 9 | 9 | 9 | 10 | 11 | 11 | 12 | 12 | 12 | 13 | 14 | 15 |
 
-| 0 | 2 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 | 0 | 0 |
+Sijoitetaan avaimet tulos taulukkoon edellisen esitetyllä tavalla.
 
-| **0001** | 1111 | 0000 | 1010 | 0011 | 1110 | 1010 | 1000 |
+a1 :: | **0010** 0110 |
 
-| 0 | 3 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 | 0 | 0 |
+|taulukon indeksi| 0 | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10 | 11 | 12 | 13 | 14 | 15 |
+|----------------|---|---|---|---|---|---|---|---|---|---|----|----|----|----|----|----|
+| histogrammi    | 0 | 1 | **5** | 9 | 9 | 9 | 9 | 10 | 11 | 11 | 12 | 12 | 12 | 13 | 14 | 15 |
+| taulukko       | a0 | - | - | - | - | **a5** | - | - | - | - | - | - | - | - | - | - |
+| histogrammi + 1| 0 | 1 | **6** | 9 | 9 | 9 | 9 | 10 | 11 | 11 | 12 | 12 | 12 | 13 | 14 | 15 |
 
-| **1100** | 0011 | 0001 | 1011 | 0000 | 1000 | 1110 | 1010 |
+a2 :: **1101** 0010 |
 
-| 0 | 3 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 | 1 | 0 | 0 |
+|taulukon indeksi| 0 | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10 | 11 | 12 | 13 | 14 | 15 |
+|----------------|---|---|---|---|---|---|---|---|---|---|----|----|----|----|----|----|
+| histogrammi    | 0 | 1 | 6 | 9 | 9 | 9 | 9 | 10 | 11 | 11 | 12 | 12 | 12 | **13** | 14 | 15 |
+| taulukko       | a0 | - | - | - | - | a5 | - | - | - | - | - | - | - | **a2** | - | - |
+| histogrammi + 1| 0 | 1 | 6 | 9 | 9 | 9 | 9 | 10 | 11 | 11 | 12 | 12 | 12 | **14** | 14 | 15 |
 
-| **0010** | 0110 | 0000 | 1110 | 1010 | 0100 | 1011 | 0000 |
+a3 :: | **0001** 0000 |
 
-| 0 | 3 | 2 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 | 1 | 0 | 0 |
+|taulukon indeksi| 0 | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10 | 11 | 12 | 13 | 14 | 15 |
+|----------------|---|---|---|---|---|---|---|---|---|---|----|----|----|----|----|----|
+| histogrammi    | 0 | **1** | 6 | 9 | 9 | 9 | 9 | 10 | 11 | 11 | 12 | 12 | 12 | 14 | 14 | 15 |
+| taulukko       | a0 | **a3** | - | - | - | a5 | - | - | - | - | - | - | - | a2 | - | - |
+| histogrammi + 1| 0 | **2** | 6 | 9 | 9 | 9 | 9 | 10 | 11 | 11 | 12 | 12 | 12 | 14 | 14 | 15 |
 
-| **0110** | 0110 | 0000 | 1110 | 1010 | 0100 | 1011 | 0000 |
+a4 :: | **0001** 1111 |
 
-| 0 | 3 | 2 | 0 | 0 | 0 | 1 | 0 | 0 | 0 | 0 | 0 | 1 | 1 | 0 | 0 |
+|taulukon indeksi| 0 | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10 | 11 | 12 | 13 | 14 | 15 |
+|----------------|---|---|---|---|---|---|---|---|---|---|----|----|----|----|----|----|
+| histogrammi    | 0 | **2** | 6 | 9 | 9 | 9 | 9 | 10 | 11 | 11 | 12 | 12 | 12 | 14 | 14 | 15 |
+| taulukko       | a0 | a3 | **a4** | - | - | a5 | - | - | - | - | - | - | - | a2 | - | - |
+| histogrammi + 1| 0 | **3** | 6 | 9 | 9 | 9 | 9 | 10 | 11 | 11 | 12 | 12 | 12 | 14 | 14 | 15 |
 
-Kun laskenta on saatu päätökseen, suoritetaan alkusumma laskenta
-histogrammista. Alkusummat lasketaan siten, että lasketaan kumulatiivisesti
-histogrammin alkioita alkusummataulukkoon. Alkusummataulukosta saadaan tietää
-se mihin kohtaan kohdetaulukkoa avain tullaan tallennetaan.
+a5 :: | **1100** 0011 |
 
-## Histogrammi
-| 0 | 3 | 2 | 0 | 0 | 0 | 1 | 0 | 0 | 0 | 0 | 0 | 1 | 1 | 0 | 0 |
+|taulukon indeksi| 0 | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10 | 11 | 12 | 13 | 14 | 15 |
+|----------------|---|---|---|---|---|---|---|---|---|---|----|----|----|----|----|----|
+| histogrammi    | 0 | 3 | 6 | 9 | 9 | 9 | 9 | 10 | 11 | 11 | **12** | 12 | 12 | 14 | 14 | 15 |
+| taulukko       | a0 | a3 | a4 | - | - | a5 | - | - | - | - | - | - | a5 | a2 | - | - |
+| histogrammi + 1| 0 | 3 | 6 | 9 | 9 | 9 | 9 | 10 | 11 | 11 | **13** | 12 | 12 | 14 | 14 | 15 |
 
-## Alkusummat (Exclusive prefix sum)
-| 0 | 0 | 3 | 5 | 5 | 5 | 5 | 6 | 6 | 6 | 6 | 6 | 6 | 7 | 8 | 8 |
+a6 :: | **0010** 0110 |
 
-Tämä vaihetta kutsutaan nimeltään laskentalajittelu (counting sort). Avaimet
-lajitellaan nyt eniten merkitsevän 4-bit mukaan järjestykseen käyttäen hyväksi
-alkusumma taulukkoa. Alkusumma taulukko kertoo sen mihin kohtaan avain
-tallennetaan jonka jälkeen alkusumma taulukon arvoa kasvatetaan yhdellä. Näin
-jokainen avain saadaan tallennettua täsmälleen yhteen paikkaan.
+|taulukon indeksi| 0 | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10 | 11 | 12 | 13 | 14 | 15 |
+|----------------|---|---|---|---|---|---|---|---|---|---|----|----|----|----|----|----|
+| histogrammi    | 0 | 3 | **6** | 9 | 9 | 9 | 9 | 10 | 11 | 11 | 13 | 12 | 12 | 14 | 14 | 15 |
+| taulukko       | a0 | a3 | a4 | - | - | a5 | **a6** | - | - | - | - | - | a5 | a2 | - | - |
+| histogrammi + 1| 0 | 3 | **7** | 9 | 9 | 9 | 9 | 10 | 11 | 11 | 13 | 12 | 12 | 14 | 14 | 15 |
 
-a0 :: | **0001** | 1010 | 1000 | 1011 | 1101 | 1000 | 1010 | 1100 | 
+a7 :: | **0110** 0110 |
 
-prefix sum :: | 0 | **0** | 3 | 5 | 5 | 5 | 5 | 6 | 6 | 6 | 6 | 6 | 6 | 7 | 8 | 8 |
+|taulukon indeksi| 0 | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10 | 11 | 12 | 13 | 14 | 15 |
+|----------------|---|---|---|---|---|---|---|---|---|---|----|----|----|----|----|----|
+| histogrammi    | 0 | 3 | 7 | 9 | 9 | 9 | **9** | 10 | 11 | 11 | 13 | 12 | 12 | 14 | 14 | 15 |
+| taulukko       | a0 | a3 | a4 | - | - | a5 | a6 | - | - | **a7** | - | - | a5 | a2 | - | - |
+| histogrammi + 1| 0 | 3 | 7 | 9 | 9 | 9 | **10** | 10 | 11 | 11 | 13 | 12 | 12 | 14 | 14 | 15 |
 
-kohde taulukko :: | **a0** | - | - | - | - | - | - | - |
+a8 :: | **1001** 1010 |
 
-prefix sum :: | 0 | **0+1** | 3 | 5 | 5 | 5 | 5 | 6 | 6 | 6 | 6 | 6 | 6 | 7 | 8 | 8 |
+|taulukon indeksi| 0 | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10 | 11 | 12 | 13 | 14 | 15 |
+|----------------|---|---|---|---|---|---|---|---|---|---|----|----|----|----|----|----|
+| histogrammi    | 0 | 3 | 7 | 9 | 9 | 9 | 10 | 10 | 11 | **11** | 13 | 12 | 12 | 14 | 14 | 15 |
+| taulukko       | a0 | a3 | a4 | - | - | a5 | a6 | - | - | a7 | - | **a8** | a5 | a2 | - | - |
+| histogrammi + 1| 0 | 3 | 7 | 9 | 9 | 9 | 10 | 10 | 11 | **12** | 13 | 12 | 12 | 14 | 14 | 15 |
 
-a1 :: | **0010** | 0110 | 0001 | 0010 | 0110 | 0010 | 1110 | 1000 |
+a9 :: | **0010** 1110 |
 
-prefix sum :: | 0 | 1 | **3** | 5 | 5 | 5 | 5 | 6 | 6 | 6 | 6 | 6 | 6 | 7 | 8 | 8 |
+|taulukon indeksi| 0 | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10 | 11 | 12 | 13 | 14 | 15 |
+|----------------|---|---|---|---|---|---|---|---|---|---|----|----|----|----|----|----|
+| histogrammi    | 0 | 3 | **7** | 9 | 9 | 9 | 10 | 10 | 11 | 12 | 13 | 12 | 12 | 14 | 14 | 15 |
+| taulukko       | a0 | a3 | a4 | - | - | a5 | a6 | **a9** | - | a7 | - | a8 | a5 | a2 | - | - |
+| histogrammi + 1| 0 | 3 | **8** | 9 | 9 | 9 | 10 | 10 | 11 | 12 | 13 | 12 | 12 | 14 | 14 | 15 |
 
-kohde taulukko :: | a0 | - | - | **a1** | - | - | - | - |
+a10 :: | **1111** 0000 |
 
-prefix sum :: | 0 | 1 | **3+1** | 5 | 5 | 5 | 5 | 6 | 6 | 6 | 6 | 6 | 6 | 7 | 8 | 8 |
+|taulukon indeksi| 0 | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10 | 11 | 12 | 13 | 14 | 15 |
+|----------------|---|---|---|---|---|---|---|---|---|---|----|----|----|----|----|----|
+| histogrammi    | 0 | 3 | 8 | 9 | 9 | 9 | 10 | 10 | 11 | 12 | 13 | 12 | 12 | 14 | 14 | **15** |
+| taulukko       | a0 | a3 | a4 | - | - | a5 | a6 | a9 | - | a7 | - | a8 | a5 | a2 | - | **a10** |
+| histogrammi + 1| 0 | 3 | 8 | 9 | 9 | 9 | 10 | 10 | 11 | 12 | 13 | 12 | 12 | 14 | 14 | **16** |
 
-a2 :: | **1101** | 0010 | 0010 | 1111 | 1001 | 1100 | 1010 | 1000 |
+a11 :: | **0001** 0001 |
 
-prefix sum :: | 0 | 1 | 4 | 5 | 5 | 5 | 5 | 6 | 6 | 6 | 6 | 6 | 6 | **7** | 8 | 8 |
+|taulukon indeksi| 0 | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10 | 11 | 12 | 13 | 14 | 15 |
+|----------------|---|---|---|---|---|---|---|---|---|---|----|----|----|----|----|----|
+| histogrammi    | 0 | **3** | 8 | 9 | 9 | 9 | 10 | 10 | 11 | 12 | 13 | 12 | 12 | 14 | 14 | 16 |
+| taulukko       | a0 | a3 | a4 | **a11** | - | a5 | a6 | a9 | - | a7 | - | a8 | a5 | a2 | - | a10 |
+| histogrammi + 1| 0 | **4** | 8 | 9 | 9 | 9 | 10 | 10 | 11 | 12 | 13 | 12 | 12 | 14 | 14 | 16 |
 
-kohde taulukko :: | a0 | - | - | a1 | - | - | - | **a2** |
+a12 :: | **0001** 0100 |
 
-prefix sum :: | 0 | 1 | 4 | 5 | 5 | 5 | 5 | 6 | 6 | 6 | 6 | 6 | 6 | **7+1** | 8 | 8 |
+|taulukon indeksi| 0 | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10 | 11 | 12 | 13 | 14 | 15 |
+|----------------|---|---|---|---|---|---|---|---|---|---|----|----|----|----|----|----|
+| histogrammi    | 0 | **4** | 8 | 9 | 9 | 9 | 10 | 10 | 11 | 12 | 13 | 12 | 12 | 14 | 14 | 16 |
+| taulukko       | a0 | a3 | a4 | a11 | **a12** | a5 | a6 | a9 | - | a7 | - | a8 | a5 | a2 | - | a10 |
+| histogrammi + 1| 0 | **5** | 8 | 9 | 9 | 9 | 10 | 10 | 11 | 12 | 13 | 12 | 12 | 14 | 14 | 16 |
 
-a3 :: | **0001** | 0000 | 0000 | 0010 | 1111 | 1000 | 1011 | 1001 |
+a13 :: | **1110** 0011 |
 
-prefix sum :: | 0 | **1** | 4 | 5 | 5 | 5 | 5 | 6 | 6 | 6 | 6 | 6 | 6 | 8 | 8 | 8 |
+|taulukon indeksi| 0 | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10 | 11 | 12 | 13 | 14 | 15 |
+|----------------|---|---|---|---|---|---|---|---|---|---|----|----|----|----|----|----|
+| histogrammi    | 0 | 5 | 8 | 9 | 9 | 9 | 10 | 10 | 11 | 12 | 13 | 12 | 12 | 14 | **14** | 16 |
+| taulukko       | a0 | a3 | a4 | a11 | a12 | a5 | a6 | a9 | - | a7 | - | a8 | a5 | a2 | **a13** | a10 |
+| histogrammi + 1| 0 | 5 | 8 | 9 | 9 | 9 | 10 | 10 | 11 | 12 | 13 | 12 | 12 | 14 | **15** | 16 |
 
-kohde taulukko :: | a0 | **a3** | - | a1 | - | - | - | a2 |
+a14 :: | **0010** 0110 |
 
-prefix sum :: | 0 | **1+1** | 4 | 5 | 5 | 5 | 5 | 6 | 6 | 6 | 6 | 6 | 6 | 8 | 8 | 8 |
+|taulukon indeksi| 0 | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10 | 11 | 12 | 13 | 14 | 15 |
+|----------------|---|---|---|---|---|---|---|---|---|---|----|----|----|----|----|----|
+| histogrammi    | 0 | 5 | **8** | 9 | 9 | 9 | 10 | 10 | 11 | 12 | 13 | 12 | 12 | 14 | 15 | 16 |
+| taulukko       | a0 | a3 | a4 | a11 | a12 | a5 | a6 | a9 | **a14** | a7 | - | a8 | a5 | a2 | a13 | a10 |
+| histogrammi + 1| 0 | 5 | **9** | 9 | 9 | 9 | 10 | 10 | 11 | 12 | 13 | 12 | 12 | 14 | 15 | 16 |
 
-a4 :: | **0001** | 1111 | 0000 | 1010 | 0011 | 1110 | 1010 | 1000 |
+a15 :: | **0111** 0110 |
 
-prefix sum :: | 0 | **2** | 4 | 5 | 5 | 5 | 5 | 6 | 6 | 6 | 6 | 6 | 6 | 8 | 8 | 8 |
+|taulukon indeksi| 0 | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10 | 11 | 12 | 13 | 14 | 15 |
+|----------------|---|---|---|---|---|---|---|---|---|---|----|----|----|----|----|----|
+| histogrammi    | 0 | 5 | 9 | 9 | 9 | 9 | 10 | **10** | 11 | 12 | 13 | 12 | 12 | 14 | 15 | 16 |
+| taulukko       | a0 | a3 | a4 | a11 | a12 | a5 | a6 | a9 | a14 | a7 | **a15** | a8 | a5 | a2 | a13 | a10 |
+| histogrammi + 1| 0 | 5 | 9 | 9 | 9 | 9 | 10 | **11** | 11 | 12 | 13 | 12 | 12 | 14 | 15 | 16 |
 
-kohde taulukko :: | a0 | a3 | **a4** | a1 | - | - | - | a2 |
+Alkuperäisestä histogrammista saadaan bucketien indeksit ja siihen kuuluvien avainten lukumäärät.
 
-prefix sum :: | 0 | **2+1** | 4 | 5 | 5 | 5 | 5 | 6 | 6 | 6 | 6 | 6 | 6 | 8 | 8 | 8 |
+| bucket index   | 1 | 2 | 6 | 7 | 9 | 12 | 13 | 14 | 15 | 
+| ------------   |---|---|---|---|---|----|----|----|----|
+| taulukko       | a0 , a3 , a4 , a11 , a12 | a5 , a6 , a9 , a14 | a7 | a15 | a8 | a5 | a2 | a13 | a10 |
 
-a5 :: | **1100** | 0011 | 0001 | 1011 | 0000 | 1000 | 1110 | 1010 |
+Luvut ovat nyt 4 eniten merkitsevän bitin mukaan järjestyksessä.
+Kantalukulajittelut täytyy vielä suorittaa ensimmäiselle ja toiselle
+bucketille. Laskentalajittelu etenee siten rekursiivisesti kunnes ali bucketeja
+ei enää synny. Tällöin avaimet ovat järjestetty.
 
-prefix sum :: | 0 | 3 | 4 | 5 | 5 | 5 | 5 | 6 | 6 | 6 | 6 | 6 | **6** | 8 | 8 | 8 |
-
-kohde taulukko :: | a0 | a3 | a4 | a1 | - | - | **a5** | a2 |
-
-prefix sum :: | 0 | 3 | 4 | 5 | 5 | 5 | 5 | 6 | 6 | 6 | 6 | 6 | **6+1** | 8 | 8 | 8 |
-
-a6 :: | **0010** | 0110 | 0000 | 1110 | 1010 | 0100 | 1011 | 0000 |
-
-prefix sum :: | 0 | 3 | **4** | 5 | 5 | 5 | 5 | 6 | 6 | 6 | 6 | 6 | 7 | 8 | 8 | 8 |
-
-kohde taulukko :: | a0 | a3 | a4 | a1 | **a6** | - | a5 | a2 |
-
-prefix sum :: | 0 | 3 | **4+1** | 5 | 5 | 5 | 5 | 6 | 6 | 6 | 6 | 6 | 7 | 8 | 8 | 8 |
-
-a7 :: | **0110** | 0110 | 0000 | 1110 | 1010 | 0100 | 1011 | 0000 |
-
-prefix sum :: | 0 | 3 | 5 | 5 | 5 | 5 | **5** | 6 | 6 | 6 | 6 | 6 | 7 | 8 | 8 | 8 |
-
-kohde taulukko :: | a0 | a3 | a4 | a1 | **a6** | a7 | a5 | a2 |
-
-prefix sum :: | 0 | 2 | 5 | 5 | 5 | 5 | **5+1** | 6 | 6 | 6 | 6 | 6 | 7 | 8 | 8 | 8 |
-
- Tämän
-jälkeen tehdään ensimmäinen lajittelu vaihe, eli kaikki avaimet käydään läpi,
-32-bittinen luku kopioidaan sen 8-bittisen MSB arvon mukaan uuteen taulukkoon.
-Sijainti taulukossa saadaan alkusumma taulukosta. Kun arvo on kopioitu oikealle
-paikalle kohde taulukkoa, alkusumman indeksissä olevaa arvoa kasvatetaan
-yhdellä. Eli seuraava saman numeron omaava avain kopioidaan yhtä indeksiä
-suurempaan paikkaan. Kukin avain tallenttuu siis täsmälleen kerran, ja näin
-saatu taulukko on 8 eniten merkitsevän bitin suhteen järjestyksessä. Sama
-proseduuri toistetaan ottamalla seuraavat eniten merkitsevät 8-bittiset luvut.
-Lopulta kaikki avaimet ovat järjestetty.
