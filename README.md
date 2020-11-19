@@ -325,4 +325,4 @@ Artikkelissa käytetään seuraavia merkintöjä.
 | KPB      | avain lohkon sisältämien avainten lukumäärä |
 | <ins>∂</ins> | paikallisen lajitttelun raja | 
 | $\hat{∂}$ | bucketien yhdistämisen raja | 
-| &#2202;&#02C6 | bucketien yhdistämisen raja | 
+| &#x2202;&#x2C6 | bucketien yhdistämisen raja | 
