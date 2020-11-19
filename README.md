@@ -275,7 +275,7 @@ epävakaa. Toisin sanoen kahden saman luvun omaavaa avainten alkuperäisellä
 järjestyksellä ei ole merkitystä. Tämä mahdollistaa GPU:lla säieryhmien välisen
 atomisten jaetunmuistin käytön. Tämä mahdollistaa myös 8-bittisten lukujen
 käytön laskentalajittelussa. Ethan Steelen esityksessä
-(https://slideplayer.com/slide/15106242/ käy ilmi että rinnakkaistetussa LSD
+(https://slideplayer.com/slide/15106242/) käy ilmi että rinnakkaistetussa LSD
 lajittelussa hyödynnetään säikeiden privaatteja histogrammeja joista sitten
 koostetaan lopullinen histogrammi.  Tämä tarkoittaa sitä että histogrammin
 kasvaessa rekistereiden lukumäärä kasvaa eksponentiaalisesti. Tästä syystä LSD
@@ -315,4 +315,13 @@ algoritmin lopputuloksen.
 
 ## Merkintöjä
 
+Artikkelissa käytetään seuraavia merkintöjä.
 
+| symbooli | merkitys |
+| -------- | -------- |
+| k        | avaimen bittien lukumäärä |
+| d        | numeron bittien lukumäärä |
+| KTP      | säie kohtainen avain lukumäärä |
+| KPB      | avain lohkon sisältämien avainten lukumäärä |
+| <ins>∂</ins> | paikallisen lajitttelun raja | 
+| ∂        | bucketien yhdistämisen raja | 
