@@ -323,6 +323,4 @@ Artikkelissa käytetään seuraavia merkintöjä.
 | d        | numeron bittien lukumäärä |
 | KTP      | säie kohtainen avain lukumäärä |
 | KPB      | avain lohkon sisältämien avainten lukumäärä |
-| <ins>∂</ins> | paikallisen lajitttelun raja | 
-| $\hat{∂}$ | bucketien yhdistämisen raja | 
 | &#x2202;&#x2C6 | bucketien yhdistämisen raja | 
