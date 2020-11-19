@@ -324,4 +324,4 @@ Artikkelissa käytetään seuraavia merkintöjä.
 | KTP      | säie kohtainen avain lukumäärä |
 | KPB      | avain lohkon sisältämien avainten lukumäärä |
 | <ins>∂</ins> | paikallisen lajitttelun raja | 
-| ∂        | bucketien yhdistämisen raja | 
+| $\hat{∂}$ | bucketien yhdistämisen raja | 
