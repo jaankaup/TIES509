@@ -138,7 +138,7 @@ a1 :: | **0010** 0110 |
 |taulukko      |a0|-|-|-|-|**a5**|-|-|-|-|-|-|-|-|-|-|
 |histogrammi + 1|0|1|**6**|9|9|9|9|10|11|11|12|12|12|13|14|15|
 
-a2 :: **1101** 0010|
+a2 :: | **1101** 0010 |
 
 |taulukon indeksi|0|1|2|3|4|5|6|7|8|9|10|11|12|13|14|15|
 |----------------|---|---|---|---|---|---|---|---|---|---|----|----|----|----|----|----|
@@ -146,7 +146,7 @@ a2 :: **1101** 0010|
 |taulukko      |a0|-|-|-|-|a5|-|-|-|-|-|-|-|**a2**|-|-|
 |histogrammi + 1|0|1|6|9|9|9|9|10|11|11|12|12|12|**14**|14|15|
 
-a3 ::|**0001** 0000|
+a3 :: | **0001** 0000 |
 
 |taulukon indeksi|0|1|2|3|4|5|6|7|8|9|10|11|12|13|14|15|
 |----------------|---|---|---|---|---|---|---|---|---|---|----|----|----|----|----|----|
@@ -154,7 +154,7 @@ a3 ::|**0001** 0000|
 |taulukko      |a0|**a3**|-|-|-|a5|-|-|-|-|-|-|-|a2|-|-|
 |histogrammi + 1|0|**2**|6|9|9|9|9|10|11|11|12|12|12|14|14|15|
 
-a4 ::|**0001** 1111|
+a4 ::| **0001** 1111 |
 
 |taulukon indeksi|0|1|2|3|4|5|6|7|8|9|10|11|12|13|14|15|
 |----------------|---|---|---|---|---|---|---|---|---|---|----|----|----|----|----|----|
@@ -162,7 +162,7 @@ a4 ::|**0001** 1111|
 |taulukko      |a0|a3|**a4**|-|-|a5|-|-|-|-|-|-|-|a2|-|-|
 |histogrammi + 1|0|**3**|6|9|9|9|9|10|11|11|12|12|12|14|14|15|
 
-a5 ::|**1100** 0011|
+a5 ::| **1100** 0011 |
 
 |taulukon indeksi|0|1|2|3|4|5|6|7|8|9|10|11|12|13|14|15|
 |----------------|---|---|---|---|---|---|---|---|---|---|----|----|----|----|----|----|
@@ -170,7 +170,7 @@ a5 ::|**1100** 0011|
 |taulukko      |a0|a3|a4|-|-|a5|-|-|-|-|-|-|a5|a2|-|-|
 |histogrammi + 1|0|3|6|9|9|9|9|10|11|11|**13**|12|12|14|14|15|
 
-a6 ::|**0010** 0110|
+a6 ::| **0010** 0110 |
 
 |taulukon indeksi|0|1|2|3|4|5|6|7|8|9|10|11|12|13|14|15|
 |----------------|---|---|---|---|---|---|---|---|---|---|----|----|----|----|----|----|
@@ -178,7 +178,7 @@ a6 ::|**0010** 0110|
 |taulukko      |a0|a3|a4|-|-|a5|**a6**|-|-|-|-|-|a5|a2|-|-|
 |histogrammi + 1|0|3|**7**|9|9|9|9|10|11|11|13|12|12|14|14|15|
 
-a7 ::|**0110** 0110|
+a7 ::| **0110** 0110 |
 
 |taulukon indeksi|0|1|2|3|4|5|6|7|8|9|10|11|12|13|14|15|
 |----------------|---|---|---|---|---|---|---|---|---|---|----|----|----|----|----|----|
@@ -186,7 +186,7 @@ a7 ::|**0110** 0110|
 |taulukko      |a0|a3|a4|-|-|a5|a6|-|-|**a7**|-|-|a5|a2|-|-|
 |histogrammi + 1|0|3|7|9|9|9|**10**|10|11|11|13|12|12|14|14|15|
 
-a8 ::|**1001** 1010|
+a8 ::| **1001** 1010 |
 
 |taulukon indeksi|0|1|2|3|4|5|6|7|8|9|10|11|12|13|14|15|
 |----------------|---|---|---|---|---|---|---|---|---|---|----|----|----|----|----|----|
@@ -194,7 +194,7 @@ a8 ::|**1001** 1010|
 |taulukko      |a0|a3|a4|-|-|a5|a6|-|-|a7|-|**a8**|a5|a2|-|-|
 |histogrammi + 1|0|3|7|9|9|9|10|10|11|**12**|13|12|12|14|14|15|
 
-a9 ::|**0010** 1110|
+a9 ::| **0010** 1110 |
 
 |taulukon indeksi|0|1|2|3|4|5|6|7|8|9|10|11|12|13|14|15|
 |----------------|---|---|---|---|---|---|---|---|---|---|----|----|----|----|----|----|
@@ -202,7 +202,7 @@ a9 ::|**0010** 1110|
 |taulukko      |a0|a3|a4|-|-|a5|a6|**a9**|-|a7|-|a8|a5|a2|-|-|
 |histogrammi + 1|0|3|**8**|9|9|9|10|10|11|12|13|12|12|14|14|15|
 
-a10 ::|**1111** 0000|
+a10 ::| **1111** 0000 |
 
 |taulukon indeksi|0|1|2|3|4|5|6|7|8|9|10|11|12|13|14|15|
 |----------------|---|---|---|---|---|---|---|---|---|---|----|----|----|----|----|----|
@@ -210,7 +210,7 @@ a10 ::|**1111** 0000|
 |taulukko      |a0|a3|a4|-|-|a5|a6|a9|-|a7|-|a8|a5|a2|-|**a10**|
 |histogrammi + 1|0|3|8|9|9|9|10|10|11|12|13|12|12|14|14|**16**|
 
-a11 ::|**0001** 0001|
+a11 :: |**0001** 0001|
 
 |taulukon indeksi|0|1|2|3|4|5|6|7|8|9|10|11|12|13|14|15|
 |----------------|---|---|---|---|---|---|---|---|---|---|----|----|----|----|----|----|
@@ -218,7 +218,7 @@ a11 ::|**0001** 0001|
 |taulukko      |a0|a3|a4|**a11**|-|a5|a6|a9|-|a7|-|a8|a5|a2|-|a10|
 |histogrammi + 1|0|**4**|8|9|9|9|10|10|11|12|13|12|12|14|14|16|
 
-a12 ::|**0001** 0100|
+a12 :: |**0001** 0100|
 
 |taulukon indeksi|0|1|2|3|4|5|6|7|8|9|10|11|12|13|14|15|
 |----------------|---|---|---|---|---|---|---|---|---|---|----|----|----|----|----|----|
@@ -226,7 +226,7 @@ a12 ::|**0001** 0100|
 |taulukko      |a0|a3|a4|a11|**a12**|a5|a6|a9|-|a7|-|a8|a5|a2|-|a10|
 |histogrammi + 1|0|**5**|8|9|9|9|10|10|11|12|13|12|12|14|14|16|
 
-a13 ::|**1110** 0011|
+a13 :: |**1110** 0011|
 
 |taulukon indeksi|0|1|2|3|4|5|6|7|8|9|10|11|12|13|14|15|
 |----------------|---|---|---|---|---|---|---|---|---|---|----|----|----|----|----|----|
@@ -234,7 +234,7 @@ a13 ::|**1110** 0011|
 |taulukko      |a0|a3|a4|a11|a12|a5|a6|a9|-|a7|-|a8|a5|a2|**a13**|a10|
 |histogrammi + 1|0|5|8|9|9|9|10|10|11|12|13|12|12|14|**15**|16|
 
-a14 ::|**0010** 0110|
+a14 :: |**0010** 0110|
 
 |taulukon indeksi|0|1|2|3|4|5|6|7|8|9|10|11|12|13|14|15|
 |----------------|---|---|---|---|---|---|---|---|---|---|----|----|----|----|----|----|
@@ -242,7 +242,7 @@ a14 ::|**0010** 0110|
 |taulukko      |a0|a3|a4|a11|a12|a5|a6|a9|**a14**|a7|-|a8|a5|a2|a13|a10|
 |histogrammi + 1|0|5|**9**|9|9|9|10|10|11|12|13|12|12|14|15|16|
 
-a15 ::|**0111** 0110|
+a15 :: |**0111** 0110|
 
 |taulukon indeksi|0|1|2|3|4|5|6|7|8|9|10|11|12|13|14|15|
 |----------------|---|---|---|---|---|---|---|---|---|---|----|----|----|----|----|----|
@@ -256,8 +256,63 @@ Alkuperäisestä histogrammista saadaan bucketien indeksit ja siihen kuuluvien a
 |------------ |---|---|---|---|---|----|----|----|----|
 |taulukko     |a0 , a3 , a4 , a11 , a12|a5 , a6 , a9 , a14|a7|a15|a8|a5|a2|a13|a10|
 
-Luvut ovat nyt 4 eniten merkitsevän bitin mukaan järjestyksessä.
+Luvut ovat nyt 4:n eniten merkitsevän bitin mukaan järjestyksessä.
 Kantalukulajittelut täytyy vielä suorittaa ensimmäiselle ja toiselle
 bucketille. Laskentalajittelu etenee siten rekursiivisesti kunnes ali bucketeja
 ei enää synny. Tällöin avaimet ovat järjestetty.
+
+## Algoritmin vakaus/epävakaus
+
+LSD radix sort alkoittaa lastentalajittelun vähiten merkitsevästä luvusta ja
+etenee kohti eniten merkitsevää lukua. Tällä tavalla toteutettuna algoritmin on
+oltava vakaa. Tämä tarkoittaa sitä että alkuperäisten, saman luvun omaavat
+avainten täytyy säilyttää keskenäisen järestyksen myös laskentalajittelun
+jälkeen. Eli jos on kaksi saman luvun omaavaa avainta, täytyy alkuperäinen
+järjestys ottaa huomioon.
+
+Tässä artikkelissa esitetty algoritmi on MSD radix sort, ja se on luonteeltaan
+epävakaa. Toisin sanoen kahden saman luvun omaavaa avainten alkuperäisellä
+järjestyksellä ei ole merkitystä. Tämä mahdollistaa GPU:lla säieryhmien välisen
+atomisten jaetunmuistin käytön. Tämä mahdollistaa myös 8-bittisten lukujen
+käytön laskentalajittelussa. Ethan Steelen esityksessä
+(https://slideplayer.com/slide/15106242/ käy ilmi että rinnakkaistetussa LSD
+lajittelussa hyödynnetään säikeiden privaatteja histogrammeja joista sitten
+koostetaan lopullinen histogrammi.  Tämä tarkoittaa sitä että histogrammin
+kasvaessa rekistereiden lukumäärä kasvaa eksponentiaalisesti. Tästä syystä LSD
+radis sortit ovat rajautuneen 5-bitin lukuihin mikä puolestaan lisää
+muistioperaatioiden määrää.
+
+## Laskentalajittelu ja paikallinen lajittelu
+
+Tämän artikkelin algoritmi toimii kahdella eri tavalla. Suuremmille määrille
+avaimia suoritetaan laskentalajittelu. Tämä on kuitenkin tehotonta kun
+buckettien määrää kasvaa. Tästä syystä kun lajiteltavan bucketin avaimet
+mahtuvat jaettuun muistiin, ne lajitellaan paikallisella lajittelulla (*engl.
+local sort*). Tekijät eivät mainitse mitä lajittelualgoritmia he käyttävät
+paikallisessa lajittelussa, mutta esimerkiksi bitonic sort on ainakin tähän
+referaatin kirjoittajan mielestä hyvä GPU:lle sopiva lajittelualgoritmi
+pienempien avainmäärien lajitteluun. 
+
+Laskentalajittelu jakaa bucketit ali-buckteihin, ja kun järjestettävä data on
+riittävän pieni, se järjestetään paikallisella lajittelulla. Algoritmi alkaa
+laskentalajittelulla joka jakaa järjestettävän data eniten merkitsevän luvun
+mukaan **r = 2^k** ali-bucketeihin siten että jokainen bucketiin kuuluva avain
+omaa saman eniten merkitsevän luvun. Ali-bucketien kohdalla otetaan seuraavaksi
+eniten merkitsevät luvut laskentalajitteluun. Kukin ali-bucket jaetaan jälleen
+uusiin ali-bucketeihin tai järjestetään paikallisella lajittelulla. 
+
+Lajittelu on valmis kun kaikki vähiten merkitsevän luvun bucketit ovat laskettu
+ja/tai data on järjestetty paikallisella lajittelulla. 
+
+Paikallinen lajittelu voidaan tehdä jaetussa muistissa, mutta laskentalajittelu
+tarvitsee ylimääräisen taulukon jonne hajautetut avaimet kirjoitetaan. Tässä
+algoritmissa käytetään kahta samankokoista taulukkoa ns. kaksoispuskurointina.
+Edellisen vaiheen tulokset tallenetaan toiseen taulukkoon, jota sitten
+käytetään seuraavan vaiheen syöttönä. Näin pyritään kierrättämään samoja
+taulukoita algoritmin suorituksen aikana. Nämä kaksi taulukkoa vaikuttavat
+toisiinsa, ja viimeisimpänä lajittelun kohteena oleva taulukko sisältää koko
+algoritmin lopputuloksen. 
+
+## Merkintöjä
+
 
