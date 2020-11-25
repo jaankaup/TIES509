@@ -5,3 +5,4 @@
 | 2020.11.16        | Radix Sort            | 8h            | 12h           |
 | 2020.11.17        | Radix Sort            | 8h            | 20h           |
 | 2020.11.18        | Radix Sort            | 7h            | 27h           |
+| 2020.11.25        | Radix Sort            | 3h            | 30h           |

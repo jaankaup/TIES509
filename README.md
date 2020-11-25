@@ -109,8 +109,10 @@ Alkusummat kertovat sen etäisyyden (offset) taulukossa johon avain tallennetaan
 kun avaimia aletaan käydä läpi.
 
 Histogrammi kertoo myös sen kuinka monta avainta menee kuhunkin buckettiin.
-Tässä esimerkissä ensimmäiseen buckettiin kuuluu kaksi avainta. Alkusummasta nähdään että
-ensimmäiseen bucketin aloitusindeksi on 0.
+Tässä esimerkissä ensimmäiseen buckettiin kuuluu 0 avainta. Seuraavaan
+buckettiin kuuluu 5 avainta jne. Alkusummasta nähdään että ensimmäiseen
+bucketin aloitusindeksi on 0. Myös seuraavan bucketin aloitusindeksi on 0 sillä
+ensimmäisestä bucketista ei kopioida yhtään avainta.
 
 #### Sijoitetaan ensimmäinen avain taulukkoon histogrammin avulla.
 
@@ -258,8 +260,10 @@ Alkuperäisestä histogrammista saadaan bucketien indeksit ja siihen kuuluvien a
 
 Luvut ovat nyt 4:n eniten merkitsevän bitin mukaan järjestyksessä.
 Kantalukulajittelut täytyy vielä suorittaa ensimmäiselle ja toiselle
-bucketille. Laskentalajittelu etenee siten rekursiivisesti kunnes ali bucketeja
-ei enää synny. Tällöin avaimet ovat järjestetty.
+bucketille, sillä siellä olevat avaimet täytyy vielä järjestää keskenään
+seuraavan 4-bitin mukaan. Laskentalajittelu etenee siten rekursiivisesti kunnes
+ali bucketeja ei enää synny tai jos kaikki avaimet ovat jo järjestetty vähiten
+merkitsevän numeron mukaan.
 
 ## Algoritmin vakaus/epävakaus
 
@@ -323,4 +327,5 @@ Artikkelissa käytetään seuraavia merkintöjä.
 | d        | numeron bittien lukumäärä |
 | KTP      | säie kohtainen avain lukumäärä |
 | KPB      | avain lohkon sisältämien avainten lukumäärä |
-| &#x2202;&#x2C6; | bucketien yhdistämisen raja | 
+| <ins>∂</ins> | paikallisen lajitttelun raja | 
+| &#x2202;&#x02C6; | bucketien yhdistämisen raja | 
